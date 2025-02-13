@@ -2,13 +2,44 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import AppWithRedux from "./AppWithRedux";
 import {Provider} from "react-redux";
-import {store} from "./state/store";
+import {store} from "./app/store";
+import App from "./app/App";
+import {createBrowserRouter, Navigate, RouterProvider} from "react-router-dom";
+import {Login} from "./features/Login/Login";
+import {TodolistsList} from "./features/TodolistsList/TodolistsList";
+import {ErrorSnackbar} from "./components/ErrorSnackbar/ErrorSnackbar";
+
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <App/>,
+        errorElement: <Navigate to="/404"/>,
+        children: [
+            {
+                index: true,
+                element: <Navigate to="/todolists"/>
+            },
+            {
+                path: "/login",
+                element: <Login/>,
+            },
+            {
+                path: "/todolists",
+                element: <TodolistsList/>,
+            },
+        ],
+    },
+    {
+        path: "/404",
+        element: <ErrorSnackbar/>
+    },
+]);
 
 ReactDOM.render(
     <Provider store={store}>
-        <AppWithRedux/>
+            <RouterProvider router={router}/>
     </Provider>,
     document.getElementById('root')
 );

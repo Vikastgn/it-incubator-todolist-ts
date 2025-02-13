@@ -5,8 +5,9 @@ import TextField from '@mui/material/TextField'
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
+    disabled?: boolean
 }
-export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+export const AddItemForm = React.memo(({addItem, disabled=false}: AddItemFormPropsType) => {
     console.log("AddItemForm is called")
     const [title, setTitle] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -26,7 +27,7 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
 
     const addTask = () => {
         if (title.trim() !== '') {
-            props.addItem(title.trim());
+            addItem(title.trim());
             setTitle("")
         } else {
             setError("Title is required")
@@ -35,6 +36,7 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
 
     return <div>
         <TextField
+            disabled={disabled}
             label="Enter a title"
             variant={'outlined'}
             className={error ? 'error' : ''}
@@ -45,7 +47,7 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
             onChange={onChangeHandler}
             onKeyUp={onKeyPressHandler}
         />
-        <IconButton onClick={addTask} color={'primary'}>
+        <IconButton onClick={addTask} color={'primary'} disabled={disabled}>
             <AddBoxIcon />
         </IconButton>
     </div>
